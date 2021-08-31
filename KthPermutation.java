@@ -7,39 +7,27 @@ public class KthPermutation {
         KthPermutation kthPermutation = new KthPermutation();
         int n = 5;
         int k = 17;
-        kthPermutation.getKthPermutation(n, k);
+        int[] input = kthPermutation.formInput(n);
+        kthPermutation.getResult(input, k);
         System.out.println(kthPermutation.finalResult);
-    }
-
-    private void getKthPermutation(int n, int k) {
-        int[] input = new int[n];
-        for (int i = 0; i < n; i++) {
-            input[i] = i + 1;
-        }
-        getResult(input, k);
     }
 
     private void getResult(int[] input, int k) {
         if (k == 0) {
-            for (int x = 0; x < input.length; x++) {
-                if (input[x] != -1) {
-                    finalResult = finalResult * 10 + input[x];
-                }
-            }
+            int x = getIndexOfLastDigit(input);
+            finalResult = finalResult * 10 + input[x];
         }
         else {
             int permutationsPossible = getPossiblePermutations(input);
-            int resultIndex = ((k - 1) / permutationsPossible);
-            int index = formResult(input, resultIndex);
-
-            finalResult = finalResult * 10 + input[index];
-
-            input[index] = -1;
+            int digitIndex = ((k - 1) / permutationsPossible);
+            int finalIndex = formResult(input, digitIndex);
+            finalResult = finalResult * 10 + input[finalIndex];
+            input[finalIndex] = -1;
             getResult(input, k % permutationsPossible);
         }
     }
 
-    // FInd the number of the box
+
     private int formResult(int[] input, int resultIndex) {
         int index = -1;
         for (int i = 0; i < input.length; i++) {
@@ -69,4 +57,24 @@ public class KthPermutation {
         }
         return result;
     }
+
+    private int[] formInput(int n) {
+        int[] input = new int[n];
+        for (int i = 0; i < n; i++) {
+            input[i] = i + 1;
+        }
+        return input;
+    }
+
+    private int getIndexOfLastDigit(int[] input) {
+        int index = -1;
+        for (int x = 0; x < input.length; x++) {
+            if (input[x] != -1) {
+                index = x;
+                break;
+            }
+        }
+        return index;
+    }
+
 }
